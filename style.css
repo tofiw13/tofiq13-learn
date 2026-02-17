@@ -515,10 +515,22 @@ body.dark form button:hover {
     display: flex;
     gap: 15px;
     justify-content: center;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 10px;
+    scroll-behavior: smooth;
+}
+
+.galley::-webkit-scrollbar {
+    display: none;
 }
 
 .gallery img {
+    flex: 0 0 auto;
     width: 180px;
+    height: 150px;
+    object-fit: cover;
+    scroll-snap-align: center;
     cursor: pointer;
     border-radius: 10px;
     transition: 0.3s;
