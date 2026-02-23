@@ -1,22 +1,59 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="az">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About us</title>
+    <title>About Us</title>
+
+    <!-- CSS -->
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" 
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-    <header>
-        <h1>About Us</h1>
-        <p>Biz veb inkisafi haqqinda bilik ve resurslari bolusmeye hesr olunmus qabaqcil tertibatcilardan ibaret komandayiq. Missiyamiz hem yeni baslayanlara, hem de pesekarlara front-end inkisafi sahesinde oyrenmeye ve boyumeye komek etmekdir.</p>
-        <button class="theme-toggle">Dark</button>
 
-    <nav>
-        <br>
-        <a href="index.html"><i class="fa fa-home"></i> Home</a>
-    </nav>
+    <header class="header">
+        <div class="container">
+
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <i class="fa-solid fa-code"></i> Ana Səhifə
+                </a>
+                <button class="theme-toggle">Qaranlıq Rejim</button>
+            </nav>
+
+        </div>
     </header>
-<script src="script.js"></script>
+
+    <section class="about">
+        <div class="container">
+            <h1>Haqqımızda</h1>
+
+            <p>
+                Biz web inkişafı sahəsində bilik və resursları bölüşən qabaqcıl
+                tədris platformasıyıq. Missiyamız həm yeni başlayanlara,
+                həm də peşəkar inkişaf etdiricilərə front-end dünyasında
+                güclü təməl qazandırmaqdır.
+            </p>
+
+            <p>
+                Platformamızda HTML, CSS və JavaScript üzrə dərslər,
+                praktiki layihələr və real dünya nümunələri təqdim edirik.
+                Məqsədimiz öyrənmə prosesini həm effektiv, həm də maraqlı etməkdir.
+            </p>
+
+            <div class="about-buttons">
+                <a href="contact.html" class="btn primary">
+                    <i class="fa fa-envelope"></i> Bizimlə Əlaqə
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+            <p>&copy; 2026 Tofiq Nuri. All rights reserved.</p> 
+    </footer>
+    <script src="script.js"></script>
 </body>
 </html>

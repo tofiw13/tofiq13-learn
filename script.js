@@ -1,133 +1,159 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    /* ================= FORM ================= */
-    const form = document.getElementById("contactForm");
+  const body = document.body;
 
-    if (form) {
-        const nameInput = document.getElementById("name");
-        const emailInput = document.getElementById("email");
-        const messageBox = document.getElementById("formMessage");
+  /* ================= THEME ================= */
+  const themeBtn = document.querySelector(".theme-toggle");
 
-        form.addEventListener("submit", (e) => {
-            e.preventDefault();
+  if (themeBtn) {
+    const savedTheme = localStorage.getItem("theme");
 
-            if (nameInput.value.trim() === "" || emailInput.value.trim() === "") {
-                messageBox.textContent = "Please fill in all fields.";
-                messageBox.style.color = "red";
-            } else {
-                messageBox.textContent = "Message sent successfully!";
-                messageBox.style.color = "green";
-                form.reset();
-            }
-        });
+    if (savedTheme === "dark") {
+      body.classList.add("dark");
+      themeBtn.textContent = "İşıqlı Rejim";
+    } else {
+      themeBtn.textContent = "Qaranlıq Rejim";
     }
 
-    /* ================= TODO ================= */
-    const input = document.querySelector("#todoInput");
-    const addBtn = document.querySelector("#addBtn");
-    const list = document.querySelector("#todoList");
+    themeBtn.addEventListener("click", () => {
+      body.classList.toggle("dark");
 
-    if (input && addBtn && list) {
-        addBtn.addEventListener("click", () => {
-            if (input.value.trim() === "") return;
+      if (body.classList.contains("dark")) {
+        themeBtn.textContent = "İşıqlı Rejim";
+        localStorage.setItem("theme", "dark");
+      } else {
+        themeBtn.textContent = "Qaranlıq Rejim";
+        localStorage.setItem("theme", "light");
+      }
+    });
+  }
 
-            const li = document.createElement("li");
-            li.textContent = input.value;
-
-            const deleteBtn = document.createElement("button");
-            deleteBtn.textContent = "X";
-
-            deleteBtn.addEventListener("click", () => li.remove());
-
-            li.appendChild(deleteBtn);
-            list.appendChild(li);
-            input.value = "";
-        });
-    }
-
-    /* ================= THEME ================= */
-    const body = document.body;
-    const themeBtn = document.querySelector(".theme-toggle");
-
-    if (themeBtn) {
-        const savedTheme = localStorage.getItem("theme");
-
-        if (savedTheme === "dark") {
-            body.classList.add("dark");
-            themeBtn.textContent = "Light";
-        } else {
-            themeBtn.textContent = "Dark";
-        }
-
-        themeBtn.addEventListener("click", () => {
-            body.classList.toggle("dark");
-
-            if (body.classList.contains("dark")) {
-                themeBtn.textContent = "Light";
-                localStorage.setItem("theme", "dark");
-            } else {
-                themeBtn.textContent = "Dark";
-                localStorage.setItem("theme", "light");
-            }
-        });
-    }
-
-    /* ================= MENU ================= */
-    const menuBtn = document.querySelector(".menu-btn");
-    const menu = document.getElementById("menu");
-
-    if (menuBtn && menu) {
-
-        // Menu aç / bağla
-        menuBtn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            menu.classList.toggle("open");
-        });
-
-        // Menu içində klik bağlamasın
-        menu.addEventListener("click", (e) => {
-            e.stopPropagation();
-        });
-
-        // Boş yerə klik → bağla
-        document.addEventListener("click", () => {
-            menu.classList.remove("open");
-        });
-
-        // ESC ilə bağla
-        document.addEventListener("keydown", (e) => {
-            if (e.key === "Escape") {
-                menu.classList.remove("open");
-            }
-        });
-    }
-
+  document.querySelectorAll("section, article").forEach(el => {
+  el.classList.add("fade-in");
 });
 
-const images = document.querySelectorAll(".preview-img");
-const modal = document.getElementById("imageModal");
-const modalImg = document.getElementById("modalImage");
-const closeBtn = document.querySelector(".close-btn");
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add("show");
+    }
+  });
+},{threshold:0.2});
 
-images.forEach(img => {
-    img.addEventListener("click", () => {
+document.querySelectorAll(".fade-in").forEach(el=>{
+  observer.observe(el);
+});
+
+  /* ================= MENU ================= */
+ /* ================= MENU ================= */
+const menuBtn = document.querySelector(".menu-btn");
+const menu = document.getElementById("menu");
+const overlay = document.querySelector(".overlay");
+
+if (menuBtn && menu && overlay) {
+
+  function openMenu() {
+    menu.classList.add("open");
+    overlay.classList.add("active");
+  }
+
+  function closeMenu() {
+    menu.classList.remove("open");
+    overlay.classList.remove("active");
+  }
+
+  // Menu düyməsi
+  menuBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    if (menu.classList.contains("open")) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  });
+
+  // Overlay klik → bağla
+  overlay.addEventListener("click", () => {
+    closeMenu();
+  });
+
+  // Menu içində klik bağlamasın
+  menu.addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
+
+  // ESC ilə bağla
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      closeMenu();
+    }
+  });
+}
+
+  /* ================= CONTACT FORM ================= */
+  const form = document.getElementById("contactForm");
+
+  if (form) {
+    const status = document.getElementById("formMessage");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      status.textContent = "Göndərilir...";
+      status.style.color = "";
+
+      try {
+        const response = await fetch(form.action, {
+          method: form.method,
+          body: new FormData(form),
+          headers: { Accept: "application/json" },
+        });
+
+        if (response.ok) {
+          status.textContent = "Mesaj göndərildi ✅";
+          status.style.color = "lightgreen";
+          form.reset();
+        } else {
+          status.textContent = "Xəta baş verdi ❌";
+          status.style.color = "red";
+        }
+      } catch {
+        status.textContent = "Şəbəkə xətası ❌";
+        status.style.color = "red";
+      }
+    });
+  }
+
+  /* ================= GALLERY MODAL ================= */
+  const images = document.querySelectorAll(".preview-img");
+  const modal = document.getElementById("imageModal");
+  const modalImg = document.getElementById("modalImage");
+  const closeBtn = document.querySelector(".close-btn");
+
+  if (images.length && modal && modalImg && closeBtn) {
+
+    images.forEach((img) => {
+      img.addEventListener("click", () => {
         modal.classList.add("open");
         modalImg.src = img.src;
-    })
-})
+        modalImg.alt = img.alt || "";
+      });
+    });
 
-closeBtn.addEventListener("click", () => {
-    modal.classList.remove("open");
-})
+    const closeModal = () => {
+      modal.classList.remove("open");
+    };
 
-modal.addEventListener("click", (e) => {
-    if(e.target === modal) {
-        modal.classList.remove("open");
-    }
-})
+    closeBtn.addEventListener("click", closeModal);
 
-document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-        modal.classList.remove("open")
-    }
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeModal();
+    });
+  }
+
 });
