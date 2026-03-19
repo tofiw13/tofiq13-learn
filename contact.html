@@ -9,11 +9,11 @@
 </head>
 <body>
     <header>
-        <h1>Contact Us</h1>
+        <h1>Bizimlə Əlaqə</h1>
         <button class="theme-toggle">Dark</button>
         <br>
         <nav>
-        <a href="index.html"><i class="fa fa-home"></i>Home</a>
+        <a href="index.html"><i class="fa fa-home"></i>Ana Səhifə</a>
         </nav>
     </header>
     <form id="my-form" action="https://formspree.io/f/xqedborl" method="POST">
@@ -28,7 +28,7 @@
 </form>
 <script>
   var form = document.getElementById("my-form");
-  
+  var status = document.getElementById("my-form-status");
   async function handleSubmit(event) {
     event.preventDefault();
     var status = document.getElementById("my-form-status");
@@ -53,7 +53,7 @@
         })
       }
     }).catch(error => {
-      status.innerHTML = "Oops! There was a problem submitting your form"
+      status.innerHTML = "Bir problem oldu"
     });
   }
   form.addEventListener("submit", handleSubmit)

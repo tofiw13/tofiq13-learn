@@ -157,3 +157,21 @@ if (menuBtn && menu && overlay) {
   }
 
 });
+
+document.querySelectorAll(".clickable-html").forEach(el => {
+  el.addEventListener("click", () => {
+    window.location.href = "https://www.w3schools.com/html/";
+  });
+});
+
+document.querySelectorAll(".clickable-css").forEach(el => {
+  el.addEventListener("click", () => {
+    window.location.href = "https://www.w3schools.com/css/";
+  });
+});
+
+document.querySelectorAll(".clickable-js").forEach(el => {
+  el.addEventListener("click", () => {
+    window.location.href = "https://www.w3schools.com/js/";
+  });
+});
