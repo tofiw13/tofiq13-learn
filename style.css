@@ -75,7 +75,7 @@ section {
   margin-bottom: 50px;
   padding: 30px;
   max-width: 900px;
-  background-color: var(--surface-glass);
+  background-color: var(--surface);
   backdrop-filter: blur(20px);
   border: 1px solid var(--border);
   border-radius: 20px;
@@ -165,8 +165,8 @@ body.dark .theme-toggle {
 }
 
 .menu-btn,
-theme-toggle {
-    background:var(--gradient);
+.theme-toggle {
+    background:var(--primary);
     padding: 10px 18px;
     border-radius: 12px;
     font-weight: 600;
