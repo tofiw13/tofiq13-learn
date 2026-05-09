@@ -29,14 +29,43 @@
 <main id="home">
 <br>
   <section>
-    <h2>Öyrənmə saytları</h2>
-    <ul>
-      <li><a href="https://www.w3schools.com/">W3Schools</a></li>
-      <li><a href="https://developer.mozilla.org/">MDN Web Docs</a></li>
-      <li><a href="https://www.freecodecamp.org/">freeCodeCamp</a></li>
-      <li><a href="https://html.com/">HTML.com</a></li>
-      <li><a href="https://www.codecademy.com/">Codecademy</a></li>
-    </ul>
+  <h2>Öyrənmə saytları</h2>
+
+  <div style="margin-bottom:10px;">
+    <input type="text" id="customName" placeholder="Saytın adı">
+    <input type="text" id="customLink" placeholder="https://...">
+    <button id="addCustom">Əlavə et</button>
+  </div>
+
+  <div style="margin-bottom:10px;">
+    <select id="siteSelect">
+      <option value="https://www.w3schools.com/">W3Schools</option>
+      <option value="https://developer.mozilla.org/">MDN Web Docs</option>
+      <option value="https://www.freecodecamp.org/">freeCodeCamp</option>
+      <option value="https://www.codecademy.com/">Codecademy</option>
+    </select>
+
+    <button id="addSite">Seçilmişi əlavə et</button>
+  </div>
+
+  <ul id="siteList">
+    <li>
+      <a href="https://www.w3schools.com/" target="_blank">W3Schools</a>
+      <button class="delete-btn">Sil</button>
+    </li>
+    <li>
+      <a href="https://developer.mozilla.org/" target="_blank">MDN Web Docs</a>
+      <button class="delete-btn">Sil</button>
+    </li>
+    <li>
+      <a href="https://www.freecodecamp.org/" target="_blank">freeCodeCamp</a>
+      <button class="delete-btn">Sil</button>
+    </li>
+    <li>
+      <a href="https://www.codecademy.com/" target="_blank">Codecademy</a>
+      <button class="delete-btn">Sil</button>
+    </li>
+  </ul>
   </section>
 
   <section>
@@ -75,12 +104,12 @@
 
 <div class="gallery">
   <img 
-    src = "https://cdn.prod.website-files.com/5d4955a615f2c1cba8fdc3f9/623dda7e41299b3cacaacc16_HTML_Blog-scaled.jpeg" 
+    src = "https://www.dukeuae.com/wp-content/uploads/2022/12/html-tagst.jpg" 
     class="preview-img"
   >
 
   <img 
-    src = "https://media.geeksforgeeks.org/wp-content/uploads/20251017145424672393/what_is_css_.webp" 
+    src = "https://'media'.geeksforgeeks.org/wp-content/uploads/20251017145424672393/what_is_css_.webp" 
     class="preview-img"
   >
 
@@ -96,7 +125,6 @@
   >
 </div>
 
-<!-- MODAL -->
 <div class="modal" id="imageModal">
   <span class="close-btn">&times;</span>
   <img class="modal-content" id="modalImage">
