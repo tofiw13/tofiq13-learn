@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giriş / Qeydiyyat</title>
+    <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<header>
+  <h1>Front-end Development</h1>
+    <div style="margin-top:20px; display:flex; gap:15px;">
+        <nav>
+            <a href="index.html"><i class="fa fa-home"></i> Ana Səhifə</a>
+        </nav>
+        <button class="theme-toggle">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+    </div>
+</header>
+
+<main>
+  <div class="auth-wrapper">
+    <div class="auth-box">
+
+      <div class="user-panel" id="userPanel">
+        <div class="avatar"><i class="fa fa-user"></i></div>
+        <h2 id="welcomeName">Xoş gəldiniz!</h2>
+        <p id="welcomeEmail"></p>
+        <a href="index.html">
+          <i class="fa fa-home"></i> Ana Səhifəyə qayıt
+        </a><br>
+        <button class="logout-btn" onclick="logout()">
+          <i class="fa fa-sign-out-alt"></i> Çıxış
+        </button>
+      </div>
+
+      <div id="authForms">
+        <div class="auth-tabs">
+          <button class="auth-tab active" onclick="switchTab('login')">
+            <i class="fa fa-sign-in-alt"></i> Giriş
+          </button>
+          <button class="auth-tab" onclick="switchTab('register')">
+            <i class="fa fa-user-plus"></i> Qeydiyyat
+          </button>
+        </div>
+
+        <div class="auth-form active" id="loginForm">
+          <h2>Hesabına daxil ol</h2>
+
+          <label>Email</label>
+          <div class="input-group">
+            <i class="fa fa-envelope"></i>
+            <input type="email" id="loginEmail" placeholder="email@misal.com">
+          </div>
+
+          <label>Şifrə</label>
+          <div class="input-group">
+            <i class="fa fa-lock"></i>
+            <input type="password" id="loginPassword" placeholder="••••••••">
+          </div>
+
+          <button class="auth-btn" onclick="login()">
+            <i class="fa fa-sign-in-alt"></i> Daxil ol
+          </button>
+          <div class="auth-message" id="loginMsg"></div>
+        </div>
+
+        <div class="auth-form" id="registerForm">
+          <h2>Yeni hesab yarat</h2>
+
+          <label>İstifadəçi adı</label>
+          <div class="input-group">
+            <i class="fa fa-user"></i>
+            <input type="text" id="regUsername" placeholder="istifadəçi_adı">
+          </div>
+
+          <label>Email</label>
+          <div class="input-group">
+            <i class="fa fa-envelope"></i>
+            <input type="email" id="regEmail" placeholder="email@misal.com">
+          </div>
+
+          <label>Şifrə</label>
+          <div class="input-group">
+            <i class="fa fa-lock"></i>
+            <input type="password" id="regPassword" placeholder="Ən az 6 simvol">
+          </div>
+
+          <button class="auth-btn" onclick="register()">
+            <i class="fa fa-user-plus"></i> Qeydiyyatdan keç
+          </button>
+          <div class="auth-message" id="registerMsg"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2026 Tofiq Nuri. All rights reserved.</p>
+</footer>
+
+<div class="overlay"></div>
+
+<script src="script.js"></script>
+<script>
+  const API = '/api';
+
+  window.addEventListener("DOMContentLoaded", () => {
+    const token = localStorage.getItem("token");
+    if (token) checkToken(token);
+  });
+
+  async function checkToken(token) {
+    try {
+      const res = await fetch(`${API}/me`, {
+        headers: { "Authorization": "Bearer " + token }
+      });
+      if (res.ok) {
+        const user = await res.json();
+        showUserPanel(user.username, user.email);
+      } else {
+        localStorage.removeItem("token");
+      }
+    } catch { /* server işləmir */ }
+  }
+
+  function switchTab(tab) {
+    document.querySelectorAll(".auth-tab").forEach((t, i) => {
+      t.classList.toggle("active", (i === 0 && tab === "login") || (i === 1 && tab === "register"));
+    });
+    document.getElementById("loginForm").classList.toggle("active", tab === "login");
+    document.getElementById("registerForm").classList.toggle("active", tab === "register");
+  }
+
+  function showMsg(id, text, type) {
+    const el = document.getElementById(id);
+    el.textContent = text;
+    el.className = "auth-message " + type;
+    el.style.display = "block";
+  }
+
+  async function login() {
+    const email    = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value.trim();
+    if (!email || !password) return showMsg("loginMsg", "Email və şifrəni daxil edin", "error");
+    try {
+      const res  = await fetch(`${API}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        localStorage.setItem("token", data.token);
+        showMsg("loginMsg", data.message, "success");
+        setTimeout(() => showUserPanel(data.username), 800);
+      } else {
+        showMsg("loginMsg", data.error, "error");
+      }
+    } catch {
+      showMsg("loginMsg", "Serverə qoşula bilmədi. Backend işləyirmi?", "error");
+    }
+  }
+
+  async function register() {
+    const username = document.getElementById("regUsername").value.trim();
+    const email    = document.getElementById("regEmail").value.trim();
+    const password = document.getElementById("regPassword").value.trim();
+    if (!username || !email || !password) return showMsg("registerMsg", "Bütün sahələri doldurun", "error");
+    try {
+      const res  = await fetch(`${API}/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, email, password })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        showMsg("registerMsg", data.message + " İndi daxil ola bilərsiniz.", "success");
+        setTimeout(() => switchTab("login"), 1500);
+      } else {
+        showMsg("registerMsg", data.error, "error");
+      }
+    } catch {
+      showMsg("registerMsg", "Serverə qoşula bilmədi. Backend işləyirmi?", "error");
+    }
+  }
+
+  function showUserPanel(username, email = "") {
+    document.getElementById("authForms").style.display = "none";
+    document.getElementById("userPanel").style.display  = "block";
+    document.getElementById("welcomeName").textContent  = "Salam, " + username + "! 👋";
+    document.getElementById("welcomeEmail").textContent = email;
+  }
+
+  function logout() {
+    localStorage.removeItem("token");
+    document.getElementById("userPanel").style.display  = "none";
+    document.getElementById("authForms").style.display  = "block";
+    switchTab("login");
+  }
+</script>
+</body>
+</html>

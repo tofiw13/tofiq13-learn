@@ -3,62 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us</title>
+    <title>Bizimlə Əlaqə</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
     <header>
         <h1>Bizimlə Əlaqə</h1>
-        <button class="theme-toggle">Dark</button>
-        <br>
         <nav>
-        <a href="index.html"><i class="fa fa-home"></i>Ana Səhifə</a>
+            <a href="index.html"><i class="fa fa-home"></i> Ana Səhifə</a>
+             <button class="theme-toggle"> 
+              <i class="fa-solid fa-moon"></i>
+            </button>
         </nav>
     </header>
-    <form id="my-form" action="https://formspree.io/f/xqedborl" method="POST">
-        <label>Name</label>
-        <input type = "name" name = "Name" />
-  <label>Email:</label>
-  <input type="email" name="email" />
-  <label>Message:</label>
-  <input type="text" name="message" />
-  <button id="my-form-button">Submit</button>
-  <p id="my-form-status"></p>
-</form>
-<script>
-  var form = document.getElementById("my-form");
-  
-  async function handleSubmit(event) {
-    event.preventDefault();
-    var status = document.getElementById("my-form-status");
-    var data = new FormData(event.target);
-    fetch(event.target.action, {
-      method: form.method,
-      body: data,
-      headers: {
-          'Accept': 'application/json'
-      }
-    }).then(response => {
-      if (response.ok) {
-        status.innerHTML = "Cavabiniz qeyde alindi";
-        form.reset()
-      } else {
-        response.json().then(data => {
-          if (Object.hasOwn(data, 'errors')) {
-            status.innerHTML = data["errors"].map(error => error["message"]).join(", ")
-          } else {
-            status.innerHTML = "Oops! There was a problem submitting your form"
-          }
-        })
-      }
-    }).catch(error => {
-      status.innerHTML = "Bir problem oldu"
-    });
-  }
-  form.addEventListener("submit", handleSubmit)
-</script>
 
-<p id="formMessage"></p>
-<script src="script.js"></script>
+    <main>
+        <section class="contact-form">
+            <h2>Mesaj göndərin</h2>
+
+            <form id="my-form" action="/api/contact" method="POST">
+                <label for="name">Adınız</label>
+                <input id="name" name="name" type="text" placeholder="Adınız" required />
+
+                <label for="email">E-poçt</label>
+                <input id="email" name="email" type="email" placeholder="email@misal.com" required />
+
+                <label for="message">Mesaj</label>
+                <textarea id="message" name="message" placeholder="Mesajınızı yazın" rows="6" required></textarea>
+
+                <button type="submit">Göndər</button>
+            </form>
+
+            <p id="my-form-status"></p>
+
+            <hr style="margin:20px 0;" />
+
+            <h3>Yazılan mesajlar (admin)</h3>
+            <button id="loadMessages">Yazılanları göstər</button>
+            <div id="messagesList" style="margin-top:12px;"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p><a href="index.html">◀ Ana Səhifə</a></p>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
